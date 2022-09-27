@@ -3,7 +3,8 @@ import './App.css';
 
 import {v1} from "uuid";
 import {Todolist} from "./components/Todolist";
-import AddItemForm from "./components/AddItemForm";
+import {AddItemForm} from "./components/AddItemForm";
+
 
 export type TasksPropsType = {
     [key: string]: Array<TaskPropsType>
