@@ -13,8 +13,6 @@ export type TaskType = {
 
 export const Task = React.memo(({task, removeTask, changeTaskTitle, changeStatus}: TaskType) => {
 
-    console.log('Task')
-
     let removeTaskHandler = () => {
         removeTask(task.id)
     }
