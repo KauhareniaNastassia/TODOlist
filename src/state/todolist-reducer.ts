@@ -1,28 +1,42 @@
-import {FilterPropsType, TodolistType} from "../AppWithReduser";
 import {v1} from "uuid";
+import {TodolistType} from "../api/todolist-api";
 
-type ActionType = removeTodolistACType | addTodolistACType | changeTodolistTitleACType | changeTodolistFilterAC
+
+
+type ActionType = removeTodolistACType
+    | addTodolistACType
+    | changeTodolistTitleACType
+    | changeTodolistFilterAC
 
 let todolistId1 = v1()
 let todolistId2 = v1()
 
-const initialState: Array<TodolistType> = [
-    /*{todoId: todolistId1, todoTitle: 'What to learn', filter: 'all'},
-    {todoId: todolistId2, todoTitle: 'What to buy', filter: 'all'},*/
-]
+export type FilterPropsType = 'all' | 'completed' | 'active'
+export type TodolistDomainType = TodolistType & {
+    filter: FilterPropsType
+}
 
 
-export const todolistReducer = (state = initialState, action: ActionType): Array<TodolistType> => {
+const initialState: Array<TodolistDomainType> = []
+
+
+export const todolistReducer = (state = initialState, action: ActionType): Array<TodolistDomainType> => {
     switch (action.type) {
         case 'REMOVE-TODOLIST':
-            return state.filter(tl => tl.todoId !== action.payload.todoId)
+            return state.filter(tl => tl.id !== action.payload.todoId)
         case 'ADD-TODOLIST':
-            let newTodolist: TodolistType = {todoId: action.payload.newTodolistId, todoTitle: action.payload.newTodoTitle, filter: 'all'}
+            let newTodolist: TodolistDomainType = {
+                id: action.payload.newTodolistId,
+                title: action.payload.newTodoTitle,
+                filter: 'all',
+                addedDate: '',
+                order: 0,
+            }
             return [newTodolist, ...state]
         case 'CHANGE-TODOLIST-TITLE':
-            return state.map(tl => tl.todoId === action.payload.todoId ? {...tl, todoTitle: action.payload.newTodoTitle}: tl)
+            return state.map(tl => tl.id === action.payload.todoId ? {...tl, todoTitle: action.payload.newTodoTitle}: tl)
         case 'CHANGE-TODOLIST-FILTER':
-            const todolist = state.find(tl => tl.todoId === action.payload.todoId);
+            const todolist = state.find(tl => tl.id === action.payload.todoId);
             if (todolist) {
                 todolist.filter = action.payload.value;
             }

@@ -1,18 +1,19 @@
 import React, {useCallback} from 'react';
-import {FilterPropsType, TaskPropsType} from "../AppWithReduser";
+
 import {EditableSpan} from "./EditableSpan";
 import {AddItemForm} from "./AddItemForm";
-import {TaskWithRedux} from "./TaskWithRedux";
 import {Task} from "./Task";
+import {TaskStatuses, TaskType} from "../api/todolist-api";
+import {FilterPropsType} from "../state/todolist-reducer";
 
 type TodolistPropsType = {
     todoId: string
     title: string
-    tasks: Array<TaskPropsType>
+    tasks: Array<TaskType>
     removeTask: (todoId: string, id: string) => void
     changeFilter: (todoId: string, value: FilterPropsType) => void
     addTask: (todoId: string, title: string) => void
-    changeStatus: (todoId: string, id: string, isDone: boolean) => void
+    changeStatus: (todoId: string, id: string, status: TaskStatuses) => void
     filter: FilterPropsType
     removeTodolist: (todoId: string) => void
     changeTaskTitle: (todoId: string, id: string, inputTitle: string) => void
@@ -20,35 +21,19 @@ type TodolistPropsType = {
 }
 
 export const Todolist = React.memo((props: TodolistPropsType) => {
-    /* let [title, setTitle] = useState('')
-     let [error, setError] = useState<string | null>(null)*/
 
-    let onClickAllHandler = () => {
+
+    let onClickAllHandler = useCallback(() => {
         props.changeFilter(props.todoId, 'all')
-    }
-    let onClickActiveHandler = () => {
+    }, [props.todoId, props.changeFilter])
+    let onClickActiveHandler = useCallback (() => {
         props.changeFilter(props.todoId, 'active')
-    }
-    let onClickCompletedHandler = () => {
+    }, [props.todoId, props.changeFilter])
+    let onClickCompletedHandler = useCallback(() => {
         props.changeFilter(props.todoId, 'completed')
-    }
+    }, [props.todoId, props.changeFilter])
 
-    /* let addTaskHandler = () => {
-         if (title.trim() !== '') {
-             props.addTask(props.todoId, title.trim())
-             setTitle('')
-         } else {
-             setError('Title is required')
-         }
-     }
 
-     let onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
-     let onKeyPressInputHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-         setError(null)
-         if (e.key === 'Enter') {
-             addTaskHandler()
-         }
-     }*/
 
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.todoId)
@@ -64,18 +49,18 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
 
     let tasks =[...props.tasks]
     if (props.filter === 'active') {
-        tasks = tasks.filter(task => task.isDone === false)
+        tasks = tasks.filter(task => task.status === TaskStatuses.New)
     }
     if (props.filter === 'completed') {
-        tasks = tasks.filter(task => task.isDone === true)
+        tasks = tasks.filter(task => task.status === TaskStatuses.Completed)
     }
 
     let removeTask = useCallback((id: string) => {
         props.removeTask(props.todoId, id)
     }, [props.removeTask, props.todoId])
 
-    let changeStatus = useCallback((id: string, newIsDoneTask: boolean) => {
-        props.changeStatus(props.todoId, id, newIsDoneTask)
+    let changeStatus = useCallback((id: string, newStatusTask: TaskStatuses) => {
+        props.changeStatus(props.todoId, id, newStatusTask)
     }, [props.todoId, props.changeStatus])
 
     let changeTaskTitle = useCallback ((id: string, inputTitle: string) => {
@@ -91,16 +76,6 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                 <button onClick={removeTodolistHandler}> ✖</button>
             </h3>
             <AddItemForm addItem={addTask}/>
-            {/*<div>
-                <input
-                    value={title}
-                    onChange={onChangeInputHandler}
-                    onKeyPress={onKeyPressInputHandler}
-                    className={error ? 'error' : ''}
-                />
-                <button onClick={addTaskHandler}>+</button>
-                {error && <div className='error-message'> {error} </div>}
-            </div>*/}
             <div>
                 {
                     tasks.map((task) => {

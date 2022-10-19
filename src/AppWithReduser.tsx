@@ -7,27 +7,16 @@ import {AddItemForm} from "./components/AddItemForm";
 import {
     addTodolistAC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC,
+    changeTodolistTitleAC, FilterPropsType,
     removeTodolistAC,
     todolistReducer
 } from "./state/todolist-reducer";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer} from "./state/task-reducer";
+import {TaskPriorities, TaskStatuses, TaskType} from "./api/todolist-api";
 
-export type TasksPropsType = {
-    [key: string]: Array<TaskPropsType>
-}
-export type TaskPropsType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
-export type TodolistType = {
-    todoId: string,
-    todoTitle: string,
-    filter: FilterPropsType
-}
-
-export type FilterPropsType = 'all' | 'completed' | 'active'
+/*export type TasksPropsType = {
+    [key: string]: Array<TaskType>
+}*/
 
 
 function AppWithReducer() {
@@ -36,20 +25,23 @@ function AppWithReducer() {
     let todolistId2 = v1()
 
     let [todolists, dispatchToTodolists] = useReducer(todolistReducer, [
-            {todoId: todolistId1, todoTitle: 'What to learn', filter: 'all'},
-            {todoId: todolistId2, todoTitle: 'What to buy', filter: 'all'},
+            {id: todolistId1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
+            {id: todolistId2, title: 'What to buy', filter: 'all', addedDate: '', order: 0},
         ]
     )
 
     let [tasks, dispatchToTasks] = useReducer(taskReducer, {
             [todolistId1]: [
-                {id: v1(), title: "HTML&CSS", isDone: true},
-                {id: v1(), title: "JS", isDone: true},
-                {id: v1(), title: "ReactJS", isDone: false}
+                {id: v1(), title: "HTML&CSS", status: TaskStatuses.Completed, todoListId: todolistId1,description: '', startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low},
+
+                {id: v1(), title: "JS", status: TaskStatuses.Completed, todoListId: todolistId1,description: '', startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low},
+
+                {id: v1(), title: "ReactJS", status: TaskStatuses.New, todoListId: todolistId1,description: '', startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low}
             ],
             [todolistId2]: [
-                {id: v1(), title: 'Rest API', isDone: true},
-                {id: v1(), title: 'GraphQL', isDone: false},
+                {id: v1(), title: 'Rest API', status: TaskStatuses.Completed, todoListId: todolistId2,description: '', startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low},
+
+                {id: v1(), title: 'GraphQL', status: TaskStatuses.New, todoListId: todolistId2,description: '', startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low},
             ]
         }
     )
@@ -71,8 +63,8 @@ function AppWithReducer() {
         dispatchToTasks(action)
     }
 
-    function changeStatus(todoId: string, id: string, isDone: boolean) {
-        let action = changeTaskStatusAC(todoId, id, isDone)
+    function changeStatus(todoId: string, id: string, status: TaskStatuses) {
+        let action = changeTaskStatusAC(todoId, id, status)
         dispatchToTasks(action)
     }
 
@@ -105,18 +97,18 @@ function AppWithReducer() {
             {
                 todolists.map(tl => {
 
-                    let tasksForTodolist = tasks[tl.todoId]
+                    let tasksForTodolist = tasks[tl.id]
                     if (tl.filter === 'active') {
-                        tasksForTodolist = tasks[tl.todoId].filter(task => task.isDone === false)
+                        tasksForTodolist = tasks[tl.id].filter(task => task.status === TaskStatuses.New)
                     }
                     if (tl.filter === 'completed') {
-                        tasksForTodolist = tasks[tl.todoId].filter(task => task.isDone === true)
+                        tasksForTodolist = tasks[tl.id].filter(task => task.status === TaskStatuses.Completed)
                     }
 
                     return <Todolist
-                        key={tl.todoId}
-                        todoId={tl.todoId}
-                        title={tl.todoTitle}
+                        key={tl.id}
+                        todoId={tl.id}
+                        title={tl.title}
                         tasks={tasksForTodolist}
                         removeTask={removeTask}
                         changeFilter={changeFilter}

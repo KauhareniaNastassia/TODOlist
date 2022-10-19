@@ -1,31 +1,32 @@
 import React, {ChangeEvent, useCallback} from 'react';
 import {EditableSpan} from "./EditableSpan";
-import {TaskPropsType} from "../AppWithRedux";
 import {useDispatch} from "react-redux";
 import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/task-reducer";
+import {TaskStatuses, TaskType} from "../api/todolist-api";
 
 
-export type TaskType = {
-    task: TaskPropsType
+export type TaskPropsType = {
+    task: TaskType
     todoId: string
 }
 
 
-export const TaskWithRedux = React.memo(({task, todoId}: TaskType) => {
+export const TaskWithRedux = React.memo(({task, todoId}: TaskPropsType) => {
 
     console.log('Task')
 
     const dispatch = useDispatch()
 
 
-    let removeTaskHandler = () => {
-        dispatch(removeTaskAC(task.id, todoId))
-    }
 
-    let changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    let removeTaskHandler = useCallback(() => {
+        dispatch(removeTaskAC(task.id, todoId))
+    }, [dispatch, task.id, todoId])
+
+    let changeStatusHandler =useCallback( (e: ChangeEvent<HTMLInputElement>) => {
         let newIsDoneTask = e.currentTarget.checked
-        dispatch(changeTaskStatusAC(task.id, todoId, newIsDoneTask))
-    }
+        dispatch(changeTaskStatusAC(task.id, todoId, newIsDoneTask ? TaskStatuses.Completed : TaskStatuses.New))
+    }, [dispatch, task.id, todoId])
 
     let onChangeEditableSpanHandler = useCallback((inputTitle: string) => {
         dispatch(changeTaskTitleAC(task.id, todoId, inputTitle))
@@ -33,9 +34,9 @@ export const TaskWithRedux = React.memo(({task, todoId}: TaskType) => {
 
 
     return (
-        <div className={task.isDone ? 'is-done' : ''}>
+        <div className={task.status === TaskStatuses.Completed ? 'is-done' : ''}>
                 <input type="checkbox"
-                       checked={task.isDone}
+                       checked={task.status === TaskStatuses.Completed}
                        onChange={changeStatusHandler}
                 />
                 <EditableSpan

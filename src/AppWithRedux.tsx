@@ -1,65 +1,40 @@
 import React, {useCallback} from 'react';
 import './App.css';
-import {addTodolistAC, changeTodolistFilterAC, changeTodolistTitleAC, removeTodolistAC} from "./state/todolist-reducer";
+import {
+    addTodolistAC,
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
+    FilterPropsType,
+    removeTodolistAC,
+    TodolistDomainType
+} from "./state/todolist-reducer";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/task-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
 import {Todolist} from "./components/Todolist";
 import {AddItemForm} from "./components/AddItemForm";
+import {TaskStatuses, TaskType} from "./api/todolist-api";
 
 export type TasksPropsType = {
-    [key: string]: Array<TaskPropsType>
+    [key: string]: Array<TaskType>
 }
-export type TaskPropsType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
-export type TodolistType = {
-    todoId: string,
-    todoTitle: string,
-    filter: FilterPropsType
-}
-
-export type FilterPropsType = 'all' | 'completed' | 'active'
 
 
 function AppWithRedux() {
 
-    /*let todolistId1 = v1()
-    let todolistId2 = v1()*/
-
-    const todolists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists)
+    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
 
     const tasks = useSelector<AppRootStateType, TasksPropsType>(state => state.tasks)
 
     const dispatch = useDispatch()
 
-    /*let [todolists, dispatchToTodolists] = useReducer(todolistReducer, [
-            {todoId: todolistId1, todoTitle: 'What to learn', filter: 'all'},
-            {todoId: todolistId2, todoTitle: 'What to buy', filter: 'all'},
-        ]
-    )*/
-
-    /*let [tasks, dispatchToTasks] = useReducer(taskReducer, {
-            [todolistId1]: [
-                {id: v1(), title: "HTML&CSS", isDone: true},
-                {id: v1(), title: "JS", isDone: true},
-                {id: v1(), title: "ReactJS", isDone: false}
-            ],
-            [todolistId2]: [
-                {id: v1(), title: 'Rest API', isDone: true},
-                {id: v1(), title: 'GraphQL', isDone: false},
-            ]
-        }
-    )*/
 
     const removeTask = useCallback((todoId: string, id: string) => {
         let action = removeTaskAC(todoId, id)
         dispatch(action)
     }, [])
 
-    const changeFilter = useCallback ((todoId: string, value: FilterPropsType) => {
+    const changeFilter = useCallback((todoId: string, value: FilterPropsType) => {
         let action = changeTodolistFilterAC(todoId, value)
         dispatch(action)
     }, [dispatch])
@@ -69,12 +44,12 @@ function AppWithRedux() {
         dispatch(action)
     }, [dispatch])
 
-    const changeStatus = useCallback((todoId: string, id: string, isDone: boolean) => {
-        let action = changeTaskStatusAC(todoId, id, isDone)
+    const changeStatus = useCallback((todoId: string, id: string, status: TaskStatuses) => {
+        let action = changeTaskStatusAC(todoId, id, status)
         dispatch(action)
     }, [dispatch])
 
-    const removeTodolist = useCallback((todoId: string) =>  {
+    const removeTodolist = useCallback((todoId: string) => {
         let action = removeTodolistAC(todoId)
         dispatch(action)
     }, [dispatch])
@@ -84,12 +59,12 @@ function AppWithRedux() {
         dispatch(action)
     }, [dispatch])
 
-    const changeTaskTitle = useCallback((todoId: string, id: string,inputTitle: string) => {
+    const changeTaskTitle = useCallback((todoId: string, id: string, inputTitle: string) => {
         let action = changeTaskTitleAC(todoId, id, inputTitle)
         dispatch(action)
     }, [dispatch])
 
-    const changeTodolistTitle = useCallback ((todoId: string, newTodoTitle: string) => {
+    const changeTodolistTitle = useCallback((todoId: string, newTodoTitle: string) => {
         let action = changeTodolistTitleAC(todoId, newTodoTitle)
         dispatch(action)
     }, [dispatch])
@@ -97,34 +72,24 @@ function AppWithRedux() {
 
     return (
         <div className="App">
-            <AddItemForm addItem={addTodoList} />
+            <AddItemForm addItem={addTodoList}/>
             {
                 todolists.map(tl => {
 
-                    /*let allTodolistTasks = tasks[tl.todoId]
-                    let tasksForTodolist = allTodolistTasks
-                    if (tl.filter === 'active') {
-                        tasksForTodolist = tasks[tl.todoId].filter(task => task.isDone === false)
-                    }
-                    if (tl.filter === 'completed') {
-                        tasksForTodolist = tasks[tl.todoId].filter(task => task.isDone === true)
-                    }*/
-
                     return <Todolist
-                            key={tl.todoId}
-                            //todolist={tl}
-                            todoId={tl.todoId}
-                            title={tl.todoTitle}
-                            tasks={tasks[tl.todoId]}
-                            removeTask={removeTask}
-                            changeFilter={changeFilter}
-                            addTask={addTask}
-                            changeStatus={changeStatus}
-                            filter={tl.filter}
-                            removeTodolist={removeTodolist}
-                            changeTaskTitle = {changeTaskTitle}
-                            changeTodolistTitle={changeTodolistTitle}
-                        />
+                        key={tl.id}
+                        todoId={tl.id}
+                        title={tl.title}
+                        tasks={tasks[tl.id]}
+                        removeTask={removeTask}
+                        changeFilter={changeFilter}
+                        addTask={addTask}
+                        changeStatus={changeStatus}
+                        filter={tl.filter}
+                        removeTodolist={removeTodolist}
+                        changeTaskTitle={changeTaskTitle}
+                        changeTodolistTitle={changeTodolistTitle}
+                    />
                 })
             }
         </div>

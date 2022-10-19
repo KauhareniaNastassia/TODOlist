@@ -1,23 +1,16 @@
-import {TasksPropsType} from "../AppWithReduser";
+import {TasksPropsType} from "../App";
 import {v1} from "uuid";
 import {addTodolistACType, removeTodolistACType} from "./todolist-reducer";
+import {TaskPriorities, TaskStatuses, TaskType} from "../api/todolist-api";
+
 
 type ActionType = removeTaskACType | addTaskACType | changeTaskStatusACType | changeTaskTitleACType | addTodolistACType | removeTodolistACType
 
 let todolistId1 = v1()
 let todolistId2 = v1()
 
-let initialState: TasksPropsType = {
-    /*[todolistId1]: [
-        {id: v1(), title: "HTML&CSS", isDone: true},
-        {id: v1(), title: "JS", isDone: true},
-        {id: v1(), title: "ReactJS", isDone: false}
-    ],
-    [todolistId2]: [
-        {id: v1(), title: 'Rest API', isDone: true},
-        {id: v1(), title: 'GraphQL', isDone: false},
-    ]*/
-}
+let initialState: TasksPropsType = {}
+
 
 
 export const taskReducer = (state = initialState, action: ActionType): TasksPropsType => {
@@ -32,13 +25,13 @@ export const taskReducer = (state = initialState, action: ActionType): TasksProp
         case 'ADD-TASKS': {
             let stateCopy = {...state}
             let tasks = stateCopy[action.payload.todoId]
-            let newTask = {id: v1(), title: action.payload.title, isDone: false}
+            let newTask: TaskType = {id: v1(), title: action.payload.title, status: TaskStatuses.New, todoListId: action.payload.todoId,description: '', startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low}
             stateCopy[action.payload.todoId] = [newTask, ...tasks]
             return stateCopy
         }
         case 'CHANGE-TASK-STATUS':{
             let todolistTasks = state[action.payload.todoId];
-            let newTasksArray = todolistTasks.map(t => t.id === action.payload.id ? {...t, isDone: action.payload.isDone} : t);
+            let newTasksArray = todolistTasks.map(t => t.id === action.payload.id ? {...t, isDone: action.payload.status} : t);
 
             state[action.payload.todoId] = newTasksArray;
             return ({...state});
@@ -92,13 +85,13 @@ export const addTaskAC = (title: string, todoId: string) => {
 }
 
 export type changeTaskStatusACType = ReturnType<typeof changeTaskStatusAC>
-export const changeTaskStatusAC = (todoId: string, id: string, isDone: boolean) => {
+export const changeTaskStatusAC = (todoId: string, id: string, status: TaskStatuses) => {
     return {
         type: 'CHANGE-TASK-STATUS',
         payload: {
             todoId,
             id,
-            isDone
+            status
         }
     } as const
 }
