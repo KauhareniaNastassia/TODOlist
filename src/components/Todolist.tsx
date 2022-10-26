@@ -1,10 +1,13 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 import {EditableSpan} from "./EditableSpan";
 import {AddItemForm} from "./AddItemForm";
 import {Task} from "./Task";
 import {TaskStatuses, TaskType} from "../api/todolist-api";
 import {FilterPropsType} from "../state/todolist-reducer";
+import {useDispatch} from "react-redux";
+import {getTasksThunkCreator} from "../state/task-reducer";
+import {useAppDispatch} from "../state/hooks";
 
 type TodolistPropsType = {
     todoId: string
@@ -22,6 +25,7 @@ type TodolistPropsType = {
 
 export const Todolist = React.memo((props: TodolistPropsType) => {
 
+const dispatch = useAppDispatch()
 
     let onClickAllHandler = useCallback(() => {
         props.changeFilter(props.todoId, 'all')
@@ -47,7 +51,8 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
         props.changeTodolistTitle(props.todoId, newTodoTitle)
     }, [props.changeTodolistTitle, props.todoId])
 
-    let tasks =[...props.tasks]
+    let tasks = props.tasks
+
     if (props.filter === 'active') {
         tasks = tasks.filter(task => task.status === TaskStatuses.New)
     }
@@ -68,6 +73,11 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     }, [props.changeTaskTitle, props.todoId])
 
 
+    useEffect( () => {
+        dispatch(getTasksThunkCreator(props.todoId))
+    }, [] )
+
+
 
     return (
         <div>
@@ -78,7 +88,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
             <AddItemForm addItem={addTask}/>
             <div>
                 {
-                    tasks.map((task) => {
+                    tasks?.map((task) => {
                         return (
                             <Task
                                 key={task.id}

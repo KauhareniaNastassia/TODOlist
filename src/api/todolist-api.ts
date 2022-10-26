@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, {AxiosResponse} from 'axios'
 
 /*const settings = {
     withCredentials: true,
@@ -12,7 +12,7 @@ const instance = axios.create({
     withCredentials: true,
     headers: {
         'API-KEY': '29ceddd9-9101-4a31-9b64-db4216d3334c',
-    },
+    }
 })
 
 
@@ -102,7 +102,7 @@ export const todolistAPI = {
         return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
     createTask(todolistId: string, taskTitle: string) {
-        return instance.post<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks`, {title: taskTitle})
+        return instance.post<{taskTitle: string}, AxiosResponse<ResponseType<{ item: TaskType}>>>(`todo-lists/${todolistId}/tasks`, {title: taskTitle})
     },
 
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModuleType) {

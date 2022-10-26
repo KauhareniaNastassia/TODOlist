@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
 import {addTaskAC} from "../state/task-reducer";
 import {
-    changeTodolistFilterAC,
+    changeTodolistFilterACType,
     changeTodolistTitleAC,
     FilterPropsType,
     removeTodolistAC,
@@ -28,6 +28,7 @@ type TodolistPropsType = {
     changeTaskTitle: (todoId: string, id: string, inputTitle: string) => void
     changeTodolistTitle: (todoId: string, newTodotitle: string) => void
 }
+/*
 
 export const TodolistWithRedux =  React.memo(({todolist}: TodolistPropsType) => {
 
@@ -38,25 +39,25 @@ export const TodolistWithRedux =  React.memo(({todolist}: TodolistPropsType) => 
 
     const dispatch = useDispatch()
 
-    /* let [title, setTitle] = useState('')
-     let [error, setError] = useState<string | null>(null)*/
+    /!* let [title, setTitle] = useState('')
+     let [error, setError] = useState<string | null>(null)*!/
 
 
     let onClickAllHandler = useCallback (() => {
-        let action = changeTodolistFilterAC(id, 'all')
+        let action = changeTodolistFilterACType(id, 'all')
         dispatch(action)
     }, [dispatch] )
 
     let onClickActiveHandler = useCallback (() => {
-        let action = changeTodolistFilterAC(id, 'active')
+        let action = changeTodolistFilterACType(id, 'active')
         dispatch(action)
     }, [dispatch] )
     let onClickCompletedHandler = useCallback(() => {
-        let action = changeTodolistFilterAC(id, 'completed')
+        let action = changeTodolistFilterACType(id, 'completed')
         dispatch(action)
     }, [dispatch] )
 
-    /* let addTaskHandler = () => {
+    /!* let addTaskHandler = () => {
          if (title.trim() !== '') {
              props.addTask(props.todoId, title.trim())
              setTitle('')
@@ -71,7 +72,7 @@ export const TodolistWithRedux =  React.memo(({todolist}: TodolistPropsType) => 
          if (e.key === 'Enter') {
              addTaskHandler()
          }
-     }*/
+     }*!/
 
     const addTask = useCallback((title: string) => {
         let action = addTaskAC(title, id)
@@ -136,3 +137,4 @@ export const TodolistWithRedux =  React.memo(({todolist}: TodolistPropsType) => 
     );
 });
 
+*/

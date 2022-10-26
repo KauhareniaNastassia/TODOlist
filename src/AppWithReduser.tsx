@@ -6,7 +6,7 @@ import {Todolist} from "./components/Todolist";
 import {AddItemForm} from "./components/AddItemForm";
 import {
     addTodolistAC,
-    changeTodolistFilterAC,
+    changeTodolistFilterACType,
     changeTodolistTitleAC, FilterPropsType,
     removeTodolistAC,
     todolistReducer
@@ -18,6 +18,7 @@ import {TaskPriorities, TaskStatuses, TaskType} from "./api/todolist-api";
     [key: string]: Array<TaskType>
 }*/
 
+/*
 
 function AppWithReducer() {
 
@@ -53,7 +54,7 @@ function AppWithReducer() {
     }
 
     function changeFilter(todoId: string, value: FilterPropsType) {
-        let action = changeTodolistFilterAC(todoId, value)
+        let action = changeTodolistFilterACType(todoId, value)
         dispatchToTodolists(action)
 
     }
@@ -127,3 +128,4 @@ function AppWithReducer() {
 }
 
 export default AppWithReducer;
+*/
