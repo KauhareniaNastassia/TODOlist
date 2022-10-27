@@ -1,8 +1,5 @@
-import React, {ChangeEvent, useCallback} from 'react';
-import {EditableSpan} from "./EditableSpan";
-import {useDispatch} from "react-redux";
-import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/task-reducer";
-import {TaskStatuses, TaskType} from "../api/todolist-api";
+import React from 'react';
+import {TaskType} from "../api/todolist-api";
 
 
 export type TaskPropsType = {
@@ -11,6 +8,7 @@ export type TaskPropsType = {
 }
 
 
+/*
 export const TaskWithRedux = React.memo(({task, todoId}: TaskPropsType) => {
 
     console.log('Task')
@@ -50,3 +48,4 @@ export const TaskWithRedux = React.memo(({task, todoId}: TaskPropsType) => {
 
 
 
+*/

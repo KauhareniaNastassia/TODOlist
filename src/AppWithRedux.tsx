@@ -4,22 +4,22 @@ import {
     addTodolistAC,
     changeTodolistFilterACType,
     changeTodolistTitleAC,
-    FilterPropsType, getTodolistsThunkCreator,
+    FilterPropsType,
+    getTodolistsThunkCreator,
     removeTodolistAC,
     TodolistDomainType
 } from "./state/todolist-reducer";
 import {
-    addTaskAC, addTasksThunkCreator,
-    changeTaskStatusAC,
+    addTasksThunkCreator,
     changeTaskTitleAC,
     deleteTasksThunkCreator,
-    removeTaskAC
+    updateTaskThunkCreator
 } from "./state/task-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, AppRootStateType} from "./state/store";
+import {useSelector} from "react-redux";
+import {AppRootStateType} from "./state/store";
 import {Todolist} from "./components/Todolist";
 import {AddItemForm} from "./components/AddItemForm";
-import {TaskStatuses, TaskType, todolistAPI} from "./api/todolist-api";
+import {TaskStatuses, TaskType} from "./api/todolist-api";
 import {useAppDispatch} from "./state/hooks";
 
 export type TasksPropsType = {
@@ -36,8 +36,8 @@ function AppWithRedux() {
     const dispatch = useAppDispatch()
 
 
-    const removeTask = useCallback((todolistId: string, taskId: string) => {
-        dispatch(deleteTasksThunkCreator(todolistId, taskId))
+    const removeTask = useCallback((taskId: string, todolistId: string) => {
+        dispatch(deleteTasksThunkCreator(taskId, todolistId))
         /*let action = removeTaskAC(todoId, id)
         dispatch(action)*/
     }, [])
@@ -49,15 +49,26 @@ function AppWithRedux() {
 
     const addTask = useCallback((taskTitle: string, todolistId: string) => {
         dispatch(addTasksThunkCreator(todolistId, taskTitle))
-
         /*let action = addTaskAC(title, todoId)
         dispatch(action)*/
     }, [])
 
-    const changeStatus = useCallback((todoId: string, id: string, status: TaskStatuses) => {
-        let action = changeTaskStatusAC(todoId, id, status)
-        dispatch(action)
-    }, [dispatch])
+
+    /*const changeStatus = useCallback((todoId: string, taskId: string, status: TaskStatuses) => {
+        dispatch(updateTaskThunkCreator(todoId, taskId, status))
+       /!* let action = changeTaskStatusAC(todoId, id, status)
+        dispatch(action)*!/
+    }, [])*/
+
+// санка универсальная, но колбэки будут разные для каждого изменяемого в таске свойства
+    /*const changeStatus = useCallback((todoId: string, taskId: string, title: string) => {
+        dispatch(updateTaskThunkCreator(todoId, taskId, {title}))
+    }, [])*/
+    const changeStatus = useCallback((todoId: string, taskId: string, status: TaskStatuses) => {
+        dispatch(updateTaskThunkCreator(todoId, taskId, {status}))
+    }, [])
+
+
 
     const removeTodolist = useCallback((todoId: string) => {
         let action = removeTodolistAC(todoId)

@@ -1,19 +1,6 @@
-import React, {useCallback} from 'react';
-import {AddItemForm} from "./AddItemForm";
-import {EditableSpan} from "./EditableSpan";
-
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../state/store";
-import {addTaskAC} from "../state/task-reducer";
-import {
-    changeTodolistFilterACType,
-    changeTodolistTitleAC,
-    FilterPropsType,
-    removeTodolistAC,
-    TodolistDomainType
-} from "../state/todolist-reducer";
-import {TaskWithRedux} from "./TaskWithRedux";
-import {TaskStatuses, TaskType, TodolistType} from "../api/todolist-api";
+import React from 'react';
+import {FilterPropsType, TodolistDomainType} from "../state/todolist-reducer";
+import {TaskStatuses, TaskType} from "../api/todolist-api";
 
 type TodolistPropsType = {
     todolist: TodolistDomainType

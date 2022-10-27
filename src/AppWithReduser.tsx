@@ -1,18 +1,5 @@
-import React, {useReducer} from 'react';
+import React from 'react';
 import './App.css';
-
-import {v1} from "uuid";
-import {Todolist} from "./components/Todolist";
-import {AddItemForm} from "./components/AddItemForm";
-import {
-    addTodolistAC,
-    changeTodolistFilterACType,
-    changeTodolistTitleAC, FilterPropsType,
-    removeTodolistAC,
-    todolistReducer
-} from "./state/todolist-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer} from "./state/task-reducer";
-import {TaskPriorities, TaskStatuses, TaskType} from "./api/todolist-api";
 
 /*export type TasksPropsType = {
     [key: string]: Array<TaskType>
