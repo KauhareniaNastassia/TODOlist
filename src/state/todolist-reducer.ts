@@ -132,12 +132,15 @@ export const getTodolistsThunkCreator = (): AppThunkType => {
     }
 }
 
-/*
-export const getTodolistsThunkCreator = (): AppThunkType => async dispatch => {
-    const res = await todolistAPI.getTodolist()
-    dispatch(setTodolistsAC(res.data))
+export const removeTodolistsThunkCreator = (todolistId: string): AppThunkType => {
+    return (dispatch: Dispatch<AppActionsType>) => {
+        todolistAPI.deleteTodolist(todolistId)
+            .then((res) => {
+                dispatch(removeTodolistAC(todolistId))
+            })
+    }
 }
-*/
+
 
 
 

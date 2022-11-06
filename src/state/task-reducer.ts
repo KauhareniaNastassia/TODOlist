@@ -32,25 +32,6 @@ export const taskReducer = (state = initialState, action: TasksActionType): Task
             return stateCopy
         }
 
-        /*case 'ADD-TASKS': {
-            let stateCopy = {...state}
-            let tasks = stateCopy[action.payload.todoId]
-            let newTask: TaskType = {
-                id: v1(),
-                title: action.payload.title,
-                status: TaskStatuses.New,
-                todoListId: action.payload.todoId,
-                description: '',
-                startDate: '',
-                deadline: '',
-                addedDate: '',
-                order: 0,
-                priority: TaskPriorities.Low
-            }
-            stateCopy[action.payload.todoId] = [newTask, ...tasks]
-            return stateCopy
-        }*/
-
         case 'ADD-TASKS': {
             return {
                 ...state,
@@ -153,7 +134,6 @@ export const changeTaskStatusAC = ( id: string, status: TaskStatuses, todoId: st
         }
     } as const
 }*/
-
 //AC for updateTaskTH
 export type updateTaskACType = ReturnType<typeof updateTaskAC>
 export const updateTaskAC = ( id: string, task: TaskType, todoId: string,) => {
@@ -166,9 +146,6 @@ export const updateTaskAC = ( id: string, task: TaskType, todoId: string,) => {
         }
     } as const
 }
-
-
-
 
 export type changeTaskTitleACType = ReturnType<typeof changeTaskTitleAC>
 export const changeTaskTitleAC = (todoId: string, id: string, inputTitle: string) => {
@@ -192,8 +169,6 @@ export const setTasksAC = (tasks: TaskType[], todolistId: string) => {
 
 
 //==========================THUNK=========================
-
-
 
 export const getTasksThunkCreator = (todolistId: string) => {
     return (dispatch: Dispatch<AppActionsType>) => {
@@ -222,7 +197,6 @@ export const addTasksThunkCreator = (todolistId: string, taskTitle: string) => {
     }
 }
 
-
 /*export const updateTaskThunkCreator = (todolistId: string, taskId: string, status: TaskStatuses) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
 
     const task = getState().tasks[todolistId].find((t) => t.id === taskId)
@@ -239,9 +213,7 @@ export const addTasksThunkCreator = (todolistId: string, taskTitle: string) => {
     }
 }*/
 
-
-//update любое значение в таске
-
+//how to update любое значение в таске
 export type UpdateTaskType = {
     title?: string
     description?: string
@@ -250,8 +222,6 @@ export type UpdateTaskType = {
     startDate?: string
     deadline?: string
 }
-
-
 export const updateTaskThunkCreator = (todolistId: string, taskId: string, value: UpdateTaskType) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
 
     const task = getState().tasks[todolistId].find((t) => t.id === taskId)

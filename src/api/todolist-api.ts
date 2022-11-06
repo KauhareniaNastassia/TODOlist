@@ -1,11 +1,5 @@
 import axios, {AxiosResponse} from 'axios'
 
-/*const settings = {
-    withCredentials: true,
-    headers: {
-        'API-KEY': '29ceddd9-9101-4a31-9b64-db4216d3334c',
-    },
-}*/
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -15,22 +9,18 @@ const instance = axios.create({
     }
 })
 
-
 export type TodolistType = {
     id: string,
     title: string,
     addedDate: string,
     order: number
 }
-
 type ResponseType<T = {}> = {
     data: T,
     messages: string[],
     resultCode: number,
     fieldsError: string[]
 }
-
-
 export enum TaskPriorities {
     Low = 0,
     Middle = 1,
@@ -38,14 +28,12 @@ export enum TaskPriorities {
     Urgently = 3,
     Later = 4
 }
-
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3,
 }
-
 export type TaskType = {
     description: string
     title: string
@@ -58,15 +46,11 @@ export type TaskType = {
     order: number
     addedDate: string
 }
-
-
-
 type GetTasksResponse = {
     error: string | null
     totalCount: number
     items: TaskType[]
 }
-
 export type UpdateTaskModuleType = {
     title: string
     description: string
