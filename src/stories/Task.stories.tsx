@@ -5,7 +5,7 @@ import {Task} from "../components/Task";
 import {ReduxStoreProviderDecorator} from "../state/ReduxStoreProviderDecorator";
 import {useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
-import {TaskPropsType, TasksPropsType} from "../AppWithRedux";
+import {TaskPropsType, TasksPropsType} from "../App";
 import {action} from "@storybook/addon-actions";
 import {TaskType} from "../components/TaskWithRedux";
 

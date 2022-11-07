@@ -1,13 +1,13 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {EditableSpan} from "./EditableSpan";
-import {AddItemForm} from "./AddItemForm";
-import {Task} from "./Task";
-import {TaskStatuses, TaskType} from "../api/todolist-api";
-import {FilterPropsType} from "../state/todolist-reducer";
+import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {Task} from "./Task/Task";
+import {TaskStatuses, TaskType} from "../../../api/todolist-api";
+import {FilterPropsType} from "../todolist-reducer";
 import {useDispatch} from "react-redux";
-import {getTasksThunkCreator} from "../state/task-reducer";
-import {useAppDispatch} from "../state/hooks";
+import {getTasksThunkCreator} from "../task-reducer";
+import {useAppDispatch} from "../../../state/hooks";
 
 type TodolistPropsType = {
     todoId: string

@@ -1,5 +1,5 @@
 import React from 'react';
-import {FilterPropsType, TodolistDomainType} from "../state/todolist-reducer";
+import {FilterPropsType, TodolistDomainType} from "../features/TodolistsList/todolist-reducer";
 import {TaskStatuses, TaskType} from "../api/todolist-api";
 
 type TodolistPropsType = {
