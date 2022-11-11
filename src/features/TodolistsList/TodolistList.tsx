@@ -18,14 +18,19 @@ import {
 import {TaskStatuses} from "../../api/todolist-api";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
+import {Grid, Paper} from "@mui/material";
 
 
 type TodolistListPropsType = {
     todolists: Array<TodolistDomainType>
 }
 
+type PropsType = {
+    demo?: boolean
+}
 
-export const TodolistList: React.FC = () => {
+
+export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
 
@@ -79,9 +84,9 @@ export const TodolistList: React.FC = () => {
         dispatch(action)*/
     }, [dispatch])
 
-    const changeTaskTitle = useCallback((todoId: string, id: string, inputTitle: string) => {
-        let action = changeTaskTitleAC(todoId, id, inputTitle)
-        dispatch(action)
+    const changeTaskTitle = useCallback(( todoId: string, id: string, inputTitle: string ) => {
+
+        dispatch(updateTaskThunkCreator(todoId, id, {title: inputTitle} ))
     }, [dispatch])
 
     const changeTodolistTitle = useCallback((todoId: string, newTodoTitle: string) => {
@@ -92,32 +97,42 @@ export const TodolistList: React.FC = () => {
 
 
     useEffect(() => {
+        if(demo) {
+            return
+        }
         dispatch(getTodolistsThunkCreator())
     }, [])
 
 
     return (
-
         <div>
-            <AddItemForm addItem={addTodoList}/>
+            <Grid container style={{padding: '20px'}}>
+                <AddItemForm addItem={addTodoList}/>
+            </Grid>
 
-            {todolists.map(tl => {
+            <Grid container spacing={3}>
 
-                return <Todolist
-                    key={tl.id}
-                    todoId={tl.id}
-                    title={tl.title}
-                    tasks={tasks[tl.id]}
-                    removeTask={removeTask}
-                    changeFilter={changeFilter}
-                    addTask={addTask}
-                    changeStatus={changeStatus}
-                    filter={tl.filter}
-                    removeTodolist={removeTodolist}
-                    changeTaskTitle={changeTaskTitle}
-                    changeTodolistTitle={changeTodolistTitle}
-                />
-            })}
+                {todolists.map(tl => {
+
+                    return <Grid item key={tl.id}>
+                        <Paper style={{padding: '10px'}}>
+                            <Todolist
+                                key={tl.id}
+                                todolist={tl}
+                                tasks={tasks[tl.id]}
+                                removeTask={removeTask}
+                                changeFilter={changeFilter}
+                                addTask={addTask}
+                                changeStatus={changeStatus}
+                                removeTodolist={removeTodolist}
+                                changeTaskTitle={changeTaskTitle}
+                                changeTodolistTitle={changeTodolistTitle}
+                                demo={demo}
+                            />
+                        </Paper>
+                    </Grid>
+                })}
+            </Grid>
         </div>
     )
 

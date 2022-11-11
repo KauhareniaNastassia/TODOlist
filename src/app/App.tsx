@@ -1,36 +1,44 @@
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import './App.css';
-import {
-    addTodolistAC, addTodolistsThunkCreator,
-    changeTodolistFilterACType,
-    changeTodolistTitleAC, changeTodolistTitleThunkCreator,
-    FilterPropsType,
-    getTodolistsThunkCreator,
-    removeTodolistAC, removeTodolistsThunkCreator,
-    TodolistDomainType
-} from "../features/TodolistsList/todolist-reducer";
-import {
-    addTasksThunkCreator,
-    changeTaskTitleAC,
-    deleteTasksThunkCreator,
-    updateTaskThunkCreator
-} from "../features/TodolistsList/task-reducer";
+import {TodolistList} from "../features/TodolistsList/TodolistList";
+import {AppBar, Button, Container, IconButton, LinearProgress, Toolbar, Typography} from "@mui/material";
+import {Menu} from '@mui/icons-material';
+import CustomizedSnackbars from "../components/ErrorSnackBar/ErrorSnackBar";
 import {useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
-import {Todolist} from "../features/TodolistsList/Todolist/Todolist";
-import {AddItemForm} from "../components/AddItemForm/AddItemForm";
-import {TaskStatuses, TaskType} from "../api/todolist-api";
-import {useAppDispatch} from "../state/hooks";
-import {TodolistList} from "../features/TodolistsList/TodolistList";
+import {RequestStatusType} from "./app-reducer";
 
-function App() {
+type PropsType = {
+    demo?: boolean
+}
+
+function App({demo = false}: PropsType) {
+
+    const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
+
     return (
         <div className="App">
-            <TodolistList/>
+            <CustomizedSnackbars/>
+            <AppBar position='static'>
+                <Toolbar>
+                    <IconButton edge='start' color='inherit' aria-label='menu'>
+                        <Menu/>
+                    </IconButton>
+                    <Typography variant="h6">
+                        News
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+                {status === 'loading' && <LinearProgress/>}
+            </AppBar>
+
+            <Container fixed>
+                <TodolistList demo={demo}/>
+            </Container>
+
+
         </div>
     );
 }
-
-
 
 export default App;

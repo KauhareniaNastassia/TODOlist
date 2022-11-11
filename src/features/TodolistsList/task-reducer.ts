@@ -3,6 +3,7 @@ import {addTodolistACType, removeTodolistACType, setTodolistsACType} from "./tod
 import {TaskPriorities, TaskStatuses, TaskType, todolistAPI, UpdateTaskModuleType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
 import {AppActionsType, AppRootStateType} from "../../app/store";
+import {setErrorAC, setErrorACType, setStatusAC, setStatusACType} from "../../app/app-reducer";
 
 
 let todolistId1 = v1()
@@ -15,7 +16,7 @@ export const taskReducer = (state = initialState, action: TasksActionType): Task
         case 'REMOVE-TASKS':
             return {
                 ...state,
-                [action.todoId]:state[action.todoId].filter(t => t.id != action.id)
+                [action.todoId]:state[action.todoId].filter(t => t.id !== action.id)
             }
 
         case 'ADD-TASKS': {
@@ -39,7 +40,7 @@ export const taskReducer = (state = initialState, action: TasksActionType): Task
         case 'UPDATE-TASK':
             return {
                 ...state,
-                [action.todoId]: state[action.todoId].map( (el) => el.id === action.task.id ? {...el, ...action.task} : el )
+                [action.todoId]: state[action.todoId].map( (el) => el.id === action.id ? {...el, ...action.model} : el )
             }
 
         case 'CHANGE-TASK-TITLE':
@@ -93,8 +94,8 @@ export const addTaskAC = (todoId: string, task: TaskType) =>
 export const changeTaskStatusAC = ( id: string, status: TaskStatuses, todoId: string,) => ({type: 'CHANGE-TASK-STATUS', status, todoId, id} as const)
 */
 //AC for updateTaskTH
-export const updateTaskAC = ( id: string, task: TaskType, todoId: string,) =>
-    ({type: 'UPDATE-TASK', task, todoId, id} as const)
+export const updateTaskAC = ( id: string,  model: UpdateModelTaskType, todoId: string,) =>
+    ({type: 'UPDATE-TASK', model, todoId, id} as const)
 
 export const changeTaskTitleAC = (todoId: string, id: string, inputTitle: string) =>
     ({type: 'CHANGE-TASK-TITLE', todoId, id, inputTitle} as const)
@@ -105,10 +106,12 @@ export const setTasksAC = (tasks: TaskType[], todolistId: string) =>
 
 //==========================THUNK=========================
 
-export const getTasksThunkCreator = (todolistId: string) => (dispatch: Dispatch<AppActionsType>) => {
+export const getTasksThunkCreator = (todolistId: string) => (dispatch: Dispatch<AppActionsType | setStatusACType>) => {
+    dispatch(setStatusAC('loading'))
         todolistAPI.getTasks(todolistId)
             .then((res) => {
                 dispatch(setTasksAC(res.data.items, todolistId))
+                dispatch(setStatusAC('succeeded'))
             })
     }
 
@@ -119,10 +122,22 @@ export const deleteTasksThunkCreator = (taskId: string, todolistId: string) => (
             })
     }
 
-export const addTasksThunkCreator = (todolistId: string, taskTitle: string) => (dispatch: Dispatch<AppActionsType>) => {
+export const addTasksThunkCreator = (todolistId: string, taskTitle: string) => (dispatch: Dispatch<AppActionsType | setErrorACType | setStatusACType>) => {
+    dispatch(setStatusAC('loading'))
         todolistAPI.createTask(todolistId, taskTitle)
             .then((res) => {
-                dispatch(addTaskAC(todolistId, res.data.data.item))
+                if(res.data.resultCode === 0) {
+                    dispatch(addTaskAC(todolistId, res.data.data.item))
+                    dispatch(setStatusAC('succeeded'))
+                } else {
+                    if(res.data.messages.length) {
+                        dispatch(setErrorAC(res.data.messages[0]))
+                    } else {
+                        dispatch(setErrorAC('Some error ocurred'))
+                    }
+                    dispatch(setStatusAC('failed'))
+                }
+
             })
     }
 
@@ -143,7 +158,7 @@ export const addTasksThunkCreator = (todolistId: string, taskTitle: string) => (
 }*/
 
 //how to update любое значение в таске
-export const updateTaskThunkCreator = (todolistId: string, taskId: string, value: UpdateTaskType) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
+export const updateTaskThunkCreator = (todolistId: string, taskId: string, value: UpdateModelTaskType) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
 
     const task = getState().tasks[todolistId].find((t) => t.id === taskId)
     if (task) {
@@ -166,7 +181,7 @@ export type TasksPropsType = {
     [key: string]: Array<TaskType>
 }
 
-export type UpdateTaskType = {
+export type UpdateModelTaskType = {
     title?: string
     description?: string
     status?: TaskStatuses
