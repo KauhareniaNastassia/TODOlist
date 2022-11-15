@@ -3,6 +3,7 @@ import {todolistAPI, TodolistType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
 import {AppActionsType, AppThunkType} from "../../app/store";
 import {RequestStatusType, setAppStatusAC, setAppStatusACType} from "../../app/app-reducer";
+import {handleServerNetworkError} from "../../utils/handle-error-utils";
 
 
 let todolistId1 = v1()
@@ -85,6 +86,9 @@ export const getTodolistsThunkCreator = (): AppThunkType => {
             .then((res) => {
                 dispatch(setTodolistsAC(res.data))
                 dispatch(setAppStatusAC('succeeded'))
+            })
+            .catch( error => {
+                handleServerNetworkError(error,dispatch)
             })
     }
 }

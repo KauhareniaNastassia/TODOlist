@@ -24,14 +24,16 @@ export function App() {
                 title: 'What to learn',
                 filter: 'all',
                 addedDate: '',
-                order: 0
+                order: 0,
+                entityStatus: "idle"
             },
             {
                 id: todolistId2,
                 title: 'What to buy',
                 filter: 'all',
                 addedDate: '',
-                order: 0
+                order: 0,
+                entityStatus: "idle"
             },
         ]
     )
@@ -129,7 +131,7 @@ export function App() {
 
     function addTodoList(newTodoTitle: string) {
         let newTodolistId = v1()
-        let newTodolist: TodolistDomainType = {id: newTodolistId, title: newTodoTitle, filter: 'all', addedDate: '', order: 0}
+        let newTodolist: TodolistDomainType = {id: newTodolistId, title: newTodoTitle, filter: 'all', addedDate: '', order: 0, entityStatus: "idle"}
         setTodolists([newTodolist, ...todolists])
         setTasks({...tasks, [newTodolistId]: []})
     }
@@ -163,14 +165,13 @@ export function App() {
 
                     return <Todolist
                         key={tl.id}
-                        todoId={tl.id}
-                        title={tl.title}
+                        todolist={tl}
                         tasks={tasksForTodolist}
                         removeTask={removeTask}
                         changeFilter={changeFilter}
                         addTask={addTask}
                         changeStatus={changeStatus}
-                        filter={tl.filter}
+
                         removeTodolist={removeTodolist}
                         changeTaskTitle={changeTaskTitle}
                         changeTodolistTitle={changeTodolistTitle}

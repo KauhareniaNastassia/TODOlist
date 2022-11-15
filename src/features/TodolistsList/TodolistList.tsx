@@ -19,6 +19,7 @@ import {TaskStatuses} from "../../api/todolist-api";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
 import {Grid, Paper} from "@mui/material";
+import {Navigate} from "react-router-dom";
 
 
 type TodolistListPropsType = {
@@ -36,7 +37,11 @@ export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
 
     const tasks = useSelector<AppRootStateType, TasksPropsType>(state => state.tasks)
 
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+
     const dispatch = useAppDispatch()
+
+
 
 
     const removeTask = useCallback((taskId: string, todolistId: string) => {
@@ -97,11 +102,18 @@ export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
 
 
     useEffect(() => {
-        if(demo) {
+        if(demo || !isLoggedIn) {
             return
         }
         dispatch(getTodolistsThunkCreator())
     }, [])
+
+
+
+    if(!isLoggedIn) {
+        return < Navigate to='/'/>
+    }
+
 
 
     return (
