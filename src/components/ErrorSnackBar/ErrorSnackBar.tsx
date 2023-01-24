@@ -34,9 +34,6 @@ export default function CustomizedSnackbars() {
 
     return (
         <Stack spacing={2} sx={{ width: '100%' }}>
-            <Button variant="outlined" onClick={handleClick}>
-                Open success snackbar
-            </Button>
             <Snackbar open={isOpen} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                     {error}

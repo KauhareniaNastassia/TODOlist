@@ -15,14 +15,14 @@ type TodolistPropsType = {
     todolist: TodolistDomainType
 
     tasks: Array<TaskType>
-    removeTask: (todoId: string, id: string) => void
+    removeTask: (id: string, todoId: string) => void
     changeFilter: (todoId: string, value: FilterPropsType) => void
     addTask: (todoId: string, title: string) => void
-    changeStatus: (todoId: string, id: string, status: TaskStatuses) => void
+    changeStatus: (id: string, status: TaskStatuses, todoId: string) => void
 
     removeTodolist: (todoId: string) => void
     changeTaskTitle: (todoId: string, id: string, inputTitle: string) => void
-    changeTodolistTitle: (todoId: string, newTodotitle: string) => void
+    changeTodolistTitle: (todoId: string, newTodoTitle: string) => void
     demo?: boolean
 }
 
@@ -53,7 +53,7 @@ const dispatch = useAppDispatch()
 
     const onChangeTodolistTitleHandler = useCallback((newTodoTitle: string) => {
         props.changeTodolistTitle(props.todolist.id, newTodoTitle)
-    }, [props.changeTodolistTitle, props.todolist.id])
+    }, [props.todolist.id])
 
     let tasks = props.tasks
 
@@ -64,13 +64,13 @@ const dispatch = useAppDispatch()
         tasks = tasks.filter(task => task.status === TaskStatuses.Completed)
     }
 
-    let removeTask = useCallback((id: string) => {
+    /*let removeTask = useCallback((id: string) => {
         props.removeTask(props.todolist.id, id)
-    }, [props.removeTask, props.todolist.id])
+    }, [ props.removeTask, props.todolist.id])*/
 
-    let changeStatus = useCallback((id: string, newStatusTask: TaskStatuses) => {
+    /*let changeStatus = useCallback((id: string, newStatusTask: TaskStatuses) => {
         props.changeStatus(props.todolist.id, id, newStatusTask)
-    }, [props.todolist.id, props.changeStatus])
+    }, [props.changeStatus, props.todolist.id])*/
 
     /*let changeTaskTitle = useCallback ((id: string, inputTitle: string) => {
         props.changeTaskTitle(props.todoId, id, inputTitle)
@@ -101,8 +101,8 @@ const dispatch = useAppDispatch()
                                 key={task.id}
                                 todolistId={props.todolist.id}
                                 task = {task}
-                                removeTask={removeTask}
-                                changeStatus={changeStatus}
+                                removeTask={props.removeTask}
+                                changeStatus={props.changeStatus}
                                 changeTaskTitle={ props.changeTaskTitle}
 
                             />

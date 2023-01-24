@@ -8,26 +8,24 @@ import {Delete} from '@mui/icons-material';
 export type TaskPropsType = {
     task: TaskType
     todolistId: string
-    removeTask: (id: string) => void
-    changeStatus: (id: string, status: TaskStatuses) => void
+    removeTask: (id: string, todolistId: string) => void
+    changeStatus: (id: string, status: TaskStatuses, todolistId: string) => void
     changeTaskTitle: (id: string, inputTitle: string, todolistId: string) => void
 }
 
 
 export const Task = React.memo((props: TaskPropsType) => {
 
-
-
     let removeTaskHandler = useCallback(() => {
-        props.removeTask(props.task.id)
-    }, [props.task.id])
+        props.removeTask(props.task.id, props.todolistId)
+    }, [props.task.id, props.todolistId])
 
     let changeStatusHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         let newIsDoneTask = e.currentTarget.checked
-        props.changeStatus(props.task.id, newIsDoneTask ? TaskStatuses.Completed : TaskStatuses.New)
-    }, [props.task.id])
+        props.changeStatus(props.task.id, newIsDoneTask ? TaskStatuses.Completed : TaskStatuses.New, props.todolistId)
+    }, [props.task.id,  props.todolistId])
 
-    let onChangeEditableSpanHandler = useCallback((inputTitle: string) => {
+    let changeTaskTitleHandler = useCallback((inputTitle: string) => {
         props.changeTaskTitle(props.task.id, inputTitle, props.todolistId)
     }, [props.task.id, props.todolistId])
 
@@ -42,7 +40,7 @@ export const Task = React.memo((props: TaskPropsType) => {
             />
             <EditableSpan
                 value={props.task.title}
-                onChange={onChangeEditableSpanHandler}
+                onChange={changeTaskTitleHandler}
             />
             <IconButton onClick={removeTaskHandler}>
                 <Delete/>

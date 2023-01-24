@@ -114,7 +114,7 @@ export function App() {
         setTasks({...tasks, [id]: [task, ...tasks[id]]})
     }
 
-    function changeStatus(todoId: string, id: string, status: TaskStatuses) {
+    function changeStatus( id: string, status: TaskStatuses, todoId: string) {
         let todolistTasks = tasks[todoId]
         let task = todolistTasks.find(t => t.id === id)
         if (task) {

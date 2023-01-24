@@ -89,7 +89,7 @@ export const taskReducer = (state = initialState, action: TasksActionType): Task
 //==========================ACTION CREATORS=========================
 
 
-export const removeTaskAC = (todoId: string, id: string) =>
+export const removeTaskAC = (id: string, todoId: string) =>
     ({type: 'REMOVE-TASKS', id, todoId} as const)
 
 export const addTaskAC = (todoId: string, task: TaskType) =>
@@ -160,7 +160,7 @@ export const addTasksThunkCreator = (todolistId: string, taskTitle: string) => (
 }*/
 
 //how to update любое значение в таске
-export const updateTaskThunkCreator = (todolistId: string, taskId: string, value: UpdateModelTaskType) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
+export const updateTaskThunkCreator = (taskId: string, value: UpdateModelTaskType, todolistId: string) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
 
     const task = getState().tasks[todolistId].find((t) => t.id === taskId)
     if (task) {

@@ -72,8 +72,8 @@ export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
     /*const changeStatus = useCallback((todoId: string, taskId: string, title: string) => {
         dispatch(updateTaskThunkCreator(todoId, taskId, {title}))
     }, [])*/
-    const changeStatus = useCallback((todoId: string, taskId: string, status: TaskStatuses) => {
-        dispatch(updateTaskThunkCreator(todoId, taskId, {status}))
+    const changeStatus = useCallback((taskId: string, status: TaskStatuses, todoId: string) => {
+        dispatch(updateTaskThunkCreator(taskId, {status}, todoId))
     }, [])
 
 
@@ -89,9 +89,9 @@ export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
         dispatch(action)*/
     }, [dispatch])
 
-    const changeTaskTitle = useCallback(( todoId: string, id: string, inputTitle: string ) => {
+    const changeTaskTitle = useCallback(( id: string, inputTitle: string, todoId: string) => {
 
-        dispatch(updateTaskThunkCreator(todoId, id, {title: inputTitle} ))
+        dispatch(updateTaskThunkCreator(id, {title: inputTitle}, todoId))
     }, [dispatch])
 
     const changeTodolistTitle = useCallback((todoId: string, newTodoTitle: string) => {
