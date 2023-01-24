@@ -65,10 +65,7 @@ export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
         dispatch(action)*!/
     }, [])*/
 
-// санка универсальная, но колбэки будут разные для каждого изменяемого в таске свойства
-    /*const changeStatus = useCallback((todoId: string, taskId: string, title: string) => {
-        dispatch(updateTaskThunkCreator(todoId, taskId, {title}))
-    }, [])*/
+
     const changeStatus = useCallback((taskId: string, status: TaskStatuses, todoId: string) => {
         dispatch(updateTaskThunkCreator(taskId, {status}, todoId))
     }, [dispatch])
