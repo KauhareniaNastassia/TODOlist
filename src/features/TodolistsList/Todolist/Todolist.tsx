@@ -5,7 +5,6 @@ import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {Task} from "./Task/Task";
 import {TaskStatuses, TaskType} from "../../../api/todolist-api";
 import {FilterPropsType, TodolistDomainType} from "../todolist-reducer";
-import {useDispatch} from "react-redux";
 import {getTasksThunkCreator} from "../task-reducer";
 import {useAppDispatch} from "../../../state/hooks";
 import {Button, IconButton} from "@mui/material";
@@ -33,19 +32,20 @@ const dispatch = useAppDispatch()
 
     let onClickAllHandler = useCallback(() => {
         props.changeFilter(props.todolist.id, 'all')
-    }, [props.todolist.id, props.changeFilter])
+    }, [props])
+
     let onClickActiveHandler = useCallback (() => {
         props.changeFilter(props.todolist.id, 'active')
-    }, [props.todolist.id, props.changeFilter])
+    }, [props])
     let onClickCompletedHandler = useCallback(() => {
         props.changeFilter(props.todolist.id, 'completed')
-    }, [props.todolist.id, props.changeFilter])
+    }, [props])
 
 
 
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.todolist.id)
-    }, [props.addTask, props.todolist.id])
+    }, [props])
 
     let removeTodolistHandler = () => {
         props.removeTodolist(props.todolist.id)
@@ -53,7 +53,7 @@ const dispatch = useAppDispatch()
 
     const onChangeTodolistTitleHandler = useCallback((newTodoTitle: string) => {
         props.changeTodolistTitle(props.todolist.id, newTodoTitle)
-    }, [props.todolist.id])
+    }, [props])
 
     let tasks = props.tasks
 
@@ -80,7 +80,7 @@ const dispatch = useAppDispatch()
     useEffect( () => {
         if(demo) {return}
         dispatch(getTasksThunkCreator(props.todolist.id))
-    }, [] )
+    }, [demo, dispatch, props.todolist.id] )
 
 
 

@@ -33,14 +33,16 @@ function App({demo = false}: PropsType) {
 
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        dispatch(initializedAppTC())
-    }, [])
+
 
 
     const logoutHandler = useCallback(() => {
         dispatch(logoutThunkCreator())
-    }, [])
+    }, [dispatch])
+
+    useEffect(() => {
+        dispatch(initializedAppTC())
+    }, [dispatch])
 
     if (!isInitialized) {
         return <div style={{position: 'fixed', textAlign: 'center', width: '100%'}}>
@@ -67,7 +69,8 @@ function App({demo = false}: PropsType) {
 
                 <Container fixed>
                     <Routes>
-                        <Route path='/' element={<TodolistList demo={demo}/>}/>
+                        <Route path={process.env.PUBLIC_URL + '/'} element={<TodolistList demo={demo}/>}>
+                        </Route>
                         <Route path='/login' element={<Login/>}/>
 
                         <Route path='/404' element={<h1>404: PAGE NOT FOUND</h1>}/>

@@ -1,6 +1,5 @@
 import {setAppErrorAC, setAppErrorACType, setAppStatusAC, setAppStatusACType} from "../app/app-reducer";
-import {updateTaskAC} from "../features/TodolistsList/task-reducer";
-import {ResponseType} from "../../src/api/todolist-api";
+import {ResponseType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 
 

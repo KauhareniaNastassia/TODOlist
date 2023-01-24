@@ -6,13 +6,11 @@ import {setLoggedInAC} from "../features/Login/login-reducer";
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 
-
 const initialState = {
     status: 'idle' as RequestStatusType,
     error: null as null | string,
     isInitialized: false
 }
-
 
 
 export const appReducer = (state: InitialStateType = initialState, action: AppActionsType): InitialStateType => {
@@ -31,7 +29,7 @@ export const appReducer = (state: InitialStateType = initialState, action: AppAc
 export const setAppStatusAC = (status: RequestStatusType) => ({
     type: 'APP/SET-STATUS', status
 } as const)
-export const setAppErrorAC = (error: string|null) => ({
+export const setAppErrorAC = (error: string | null) => ({
     type: 'APP/SET-ERROR', error
 } as const)
 export const setAppInitializedAC = (value: boolean) => ({
@@ -41,19 +39,16 @@ export const setAppInitializedAC = (value: boolean) => ({
 
 export const initializedAppTC = () => (dispatch: ThunkDispatch) => {
     authAPI.me()
-        .then( res => {
-            if(res.data.resultCode === 0) {
+        .then(res => {
+            if (res.data.resultCode === 0) {
                 dispatch(setLoggedInAC(true))
-
+                dispatch(setAppStatusAC('succeeded'))
             } else {
 
             }
             dispatch(setAppInitializedAC(true))
         })
-
-
 }
-
 
 
 export type setAppInitializedACType = ReturnType<typeof setAppInitializedAC>

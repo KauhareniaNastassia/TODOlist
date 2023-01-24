@@ -1,7 +1,9 @@
 import {
     addTodolistsThunkCreator,
-    changeTodolistFilterACType, changeTodolistTitleThunkCreator,
-    FilterPropsType, getTodolistsThunkCreator,
+    changeTodolistFilterACType,
+    changeTodolistTitleThunkCreator,
+    FilterPropsType,
+    getTodolistsThunkCreator,
     removeTodolistsThunkCreator,
     TodolistDomainType
 } from "./todolist-reducer";
@@ -9,12 +11,7 @@ import {useSelector} from "react-redux";
 import {AppRootStateType} from "../../app/store";
 import {useAppDispatch} from "../../state/hooks";
 import React, {useCallback, useEffect} from "react";
-import {
-    addTasksThunkCreator,
-    changeTaskTitleAC,
-    deleteTasksThunkCreator, TasksPropsType,
-    updateTaskThunkCreator
-} from "./task-reducer";
+import {addTasksThunkCreator, deleteTasksThunkCreator, TasksPropsType, updateTaskThunkCreator} from "./task-reducer";
 import {TaskStatuses} from "../../api/todolist-api";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
@@ -48,7 +45,7 @@ export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
         dispatch(deleteTasksThunkCreator(taskId, todolistId))
         /*let action = removeTaskAC(todoId, id)
         dispatch(action)*/
-    }, [])
+    }, [dispatch])
 
     const changeFilter = useCallback((todoId: string, value: FilterPropsType) => {
         let action = changeTodolistFilterACType(todoId, value)
@@ -59,7 +56,7 @@ export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
         dispatch(addTasksThunkCreator(todolistId, taskTitle))
         /*let action = addTaskAC(title, todoId)
         dispatch(action)*/
-    }, [])
+    }, [dispatch])
 
 
     /*const changeStatus = useCallback((todoId: string, taskId: string, status: TaskStatuses) => {
@@ -74,7 +71,7 @@ export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
     }, [])*/
     const changeStatus = useCallback((taskId: string, status: TaskStatuses, todoId: string) => {
         dispatch(updateTaskThunkCreator(taskId, {status}, todoId))
-    }, [])
+    }, [dispatch])
 
 
     const removeTodolist = useCallback((todoId: string) => {
@@ -106,7 +103,7 @@ export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
             return
         }
         dispatch(getTodolistsThunkCreator())
-    }, [])
+    }, [dispatch, demo, isLoggedIn])
 
 
 
