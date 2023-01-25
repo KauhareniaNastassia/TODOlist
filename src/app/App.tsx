@@ -25,16 +25,13 @@ type PropsType = {
     demo?: boolean
 }
 
-function App({demo = false}: PropsType) {
+export function App({demo = false}: PropsType) {
 
     const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
     const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized)
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const dispatch = useAppDispatch()
-
-
-
 
     const logoutHandler = useCallback(() => {
         dispatch(logoutThunkCreator())
@@ -60,7 +57,7 @@ function App({demo = false}: PropsType) {
                             <Menu/>
                         </IconButton>
                         <Typography variant="h6">
-                            News
+                            MY TODOLIST
                         </Typography>
                         {isLoggedIn && <Button onClick={logoutHandler} color="inherit">Log out</Button>}
                     </Toolbar>
@@ -76,14 +73,11 @@ function App({demo = false}: PropsType) {
                         <Route path='/404' element={<h1>404: PAGE NOT FOUND</h1>}/>
                         <Route path='*' element={<Navigate to='/404'/>}/>
                     </Routes>
-
-
                 </Container>
+
             </div>
         </BrowserRouter>
-
-
     );
 }
 
-export default App;
+
