@@ -16,7 +16,7 @@ import {TaskStatuses} from "../../api/todolist-api";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
 import {Grid, Paper} from "@mui/material";
-import {Navigate} from "react-router-dom";
+import {Navigate, redirect} from "react-router-dom";
 
 
 type PropsType = {
@@ -76,8 +76,8 @@ export const TodolistList: React.FC<PropsType> = ({demo=false}) => {
         dispatch(getTodolistsThunkCreator())
     }, [dispatch, demo, isLoggedIn])
 
-    if(!isLoggedIn) {
-        return < Navigate to='/'/>
+    if (!isLoggedIn) {
+        return <Navigate to={"/"} />
     }
 
 
